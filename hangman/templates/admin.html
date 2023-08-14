@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<html>
+<head>
+    <title>Выбор букв</title>
+</head>
+<body>
+    <h1>ADMIN</h1>
+    
+    <div id="alphabet">
+        <button class="letter" onclick="disableLetter(this)">A</button>
+        <button class="letter" onclick="disableLetter(this)">B</button>
+        <button class="letter" onclick="disableLetter(this)">C</button>
+        <!-- Добавьте кнопки для остальных букв алфавита здесь -->
+    </div>
+    
+    <h2>Использованные буквы:</h2>
+    <p id="usedLetters"></p>
+    
+    <script>
+        function disableLetter(button) {
+            button.disabled = true;
+            button.classList.add("disabled");
+            
+            var usedLetters = document.getElementById("usedLetters");
+            var letter = button.innerText;
+            usedLetters.innerHTML += letter + ", ";
+        }
+    </script>
+    
+    <style>
+        .disabled {
+            background-color: gray;
+        }
+    </style>
+</body>
+</html>
+{% endblock content %}
