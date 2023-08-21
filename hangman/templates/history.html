@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<html>
+<head>
+    <title>Game History</title>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Word</th>
+            <th>Result</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        {% for game in user_games %}
+            <tr>
+                <td>{{ game.game_date.strftime('%Y.%m.%d  %H:%M') }}</td>
+                <td>{{ game.category }}</td>
+                <td>{{ game.word }}</td>
+                <td>{{ game.game_result }}</td>
+                
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+        
+</body>
+</html>
+{% endblock %}

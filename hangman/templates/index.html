@@ -1,38 +1,9 @@
 {% extends "base.html" %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Выбор букв</title>
-</head>
-<body>
-    <h1>Выберите буквы алфавита</h1>
-    
-    <div id="alphabet">
-        <button class="letter" onclick="disableLetter(this)">A</button>
-        <button class="letter" onclick="disableLetter(this)">B</button>
-        <button class="letter" onclick="disableLetter(this)">C</button>
-        <!-- Добавьте кнопки для остальных букв алфавита здесь -->
-    </div>
-    
-    <h2>Использованные буквы:</h2>
-    <p id="usedLetters"></p>
-    
-    <script>
-        function disableLetter(button) {
-            button.disabled = true;
-            button.classList.add("disabled");
-            
-            var usedLetters = document.getElementById("usedLetters");
-            var letter = button.innerText;
-            usedLetters.innerHTML += letter + ", ";
-        }
-    </script>
-    
-    <style>
-        .disabled {
-            background-color: gray;
-        }
-    </style>
-</body>
-</html>
+{% block content %}
+<div class="text-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <h1>Welcome to Hangman Game!</h1>
+    <p>Get ready to play an exciting game of Hangman!</p>
+    <a href="{{ url_for('start_game') }}" class="btn btn-primary btn-lg">Start game!</a>
+</div>
+{% endblock content %}

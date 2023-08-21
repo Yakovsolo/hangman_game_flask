@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<html>
+<head>
+    <title>Game Start</title>
+</head>
+<body>
+    <h1>Game Start</h1>
+    <form method="POST" action="/start_game">
+        {{ form.hidden_tag() }}
+        
+        <div>
+            <label for="{{ form.category.id }}">Select Category:</label>
+            {{ form.category(class="form-control") }}
+            {% if form.category.errors %}
+                <div class="alert alert-danger">{{ form.category.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <div>
+            <br> <!-- Добавленный элемент для разделения -->
+            <label for="{{ form.difficulty.id }}">Select Difficulty:</label>
+            {{ form.difficulty(class="form-control") }}
+            {% if form.difficulty.errors %}
+                <div class="alert alert-danger">{{ form.difficulty.errors[0] }}</div>
+            {% endif %}
+        </div>
+        
+        <div>
+            <br> <!-- Добавленный элемент для разделения -->
+            {{ form.start_game(class="btn btn-primary") }}
+        </div>
+    </form>
+</body>
+</html>
+{% endblock content %}
+
+
+

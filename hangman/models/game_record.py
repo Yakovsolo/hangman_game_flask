@@ -12,7 +12,7 @@ class GameRecord(db.Model, UserMixin):
     id = db.Column(Integer, primary_key=True)
     game_date = db.Column(DateTime, default=datetime.now())
     category = db.Column(String, nullable=False)
-    word = db.Column(String, unique=True, nullable=False)
+    word = db.Column(String, nullable=False)
     word_length = db.Column(Integer, nullable=False)
     game_result = db.Column(String, nullable=False)
     account_id = db.Column(Integer, db.ForeignKey("accounts.id"))

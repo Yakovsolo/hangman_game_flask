@@ -49,6 +49,7 @@ class AdminModelView(ModelView):
 
 
 from hangman.routes.account_routes import *
+from hangman.routes.hangman_game_routes import *
 
 admin = Admin(app)
 admin.add_view(AdminModelView(Account, db.session))

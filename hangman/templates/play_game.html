@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 d-flex align-items-center justify-content-center">
+            <div class="text-center" id="imageContainer">
+                <div class="mt-4">
+                    <img id="letterImage" src="{{ url_for('static', filename='game/' + image_name + '.png') }}" alt="Hangman Image">
+                </div>
+                <h2 class="mt-4">Used Letters:</h2>
+                {% for letter in used_letters %}
+                    {{ letter }}&nbsp;
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center justify-content-center">
+            <div class="text-center">
+                <div id="wordContainer" class="mt-4">
+                    {% for letter in hashed_word %}
+                        {{ letter }}&nbsp;
+                    {% endfor %}
+                </div>
+                <h2 class="mt-4">Select a Letter:</h2>
+                <div class="row letter-group justify-content-center mb-3">
+                    <div class="col-lg-10">
+                        <form id="letterForm" action="{{ url_for('play_game') }}" method="post">
+                            <input type="hidden" name="hashed_word" value="{{ hashed_word }}">
+                            <input type="hidden" name="used_letters" value="{{ used_letters | tojson }}">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="letter" id="letterInput" maxlength="1" pattern="[A-Za-z]" title="Please enter a single letter." required>
+                                <button class="btn btn-primary" type="submit">Submit</button>
+                            </div>
+                        </form>
+
+                        
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <form action="/exit" method="post">
+                            <button type="submit" class="btn btn-danger">Выход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.letter').forEach(function(button) {
+            if (localStorage.getItem(button.id) === 'used') {
+                button.disabled = true;
+                button.classList.add("used");
+            }
+        });
+
+        if (document.getElementById("hiddenLetterInput").value === "") {
+            document.querySelectorAll('.letter').forEach(function(button) {
+                button.disabled = false;
+            });
+        } else {
+            document.querySelectorAll('.letter').forEach(function(button) {
+                if (localStorage.getItem(button.id) === 'used') {
+                    button.disabled = true;
+                    button.classList.add("used");
+                }
+            });
+        }
+    });
+
+    function sendLetter(button, letter) {
+        const formData = new FormData();
+        formData.append("letter", letter);
+
+        fetch("/play_game", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("hashed_word").innerHTML = data.hashed_word;
+            document.getElementById("counter").textContent = data.counter;
+            document.getElementById("used_letters").textContent = data.used_letters.join(' ');
+            document.getElementById("wrong_attempts").textContent = data.wrong_attempts;
+
+            if (data.result) {
+                alert(data.result);
+            }
+
+            button.disabled = true;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+{% endblock %}
