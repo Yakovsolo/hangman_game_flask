@@ -1,1 +1,1 @@
-# hangman_game_flask
+# Hangman Game App

@@ -12,7 +12,10 @@ with app.app_context():
     db.create_all()
 
 
-def get_word(db: Session, search_word: str) -> Optional[Word]:
+def get_word(
+    db: Session,
+    search_word: str,
+) -> Optional[Word]:
     word = db.query(Word).filter(Word.name == search_word).first()
     if word:
         return word
@@ -27,36 +30,30 @@ def get_random_word(db: Session) -> str:
     return random_word
 
 
-def get_random_word_by_len(db: Session, word_length: int) -> str:
+def get_random_word_by_len(
+    db: Session,
+    word_length: int,
+) -> str:
     all_words = db.query(Word).filter(Word.word_length == word_length).all()
     words = [word.word for word in all_words]
     random_word = choice(words)
     return random_word
 
 
-def get_random_word_by_category(db: Session, category: str) -> str:
+def get_random_word_by_category(
+    db: Session,
+    category: str,
+) -> str:
     all_words = db.query(Word).filter(Word.word_length == category).all()
     words = [word.word for word in all_words]
     random_word = choice(words)
     return random_word
 
 
-def get_random_word_by_category_length(
+def add_word(
     db: Session,
-    category: str,
-    word_length: int,
-) -> str:
-    all_words = (
-        db.query(Word)
-        .filter(Word.category == category, Word.word_length == word_length)
-        .all()
-    )
-    words = [word.word for word in all_words]
-    random_word = choice(words)
-    return random_word
-
-
-def add_word(db: Session, word: Word) -> Word:
+    word: Word,
+) -> Word:
     db_word = Word(
         word=word.word,
         word_length=word.word_length,
@@ -66,32 +63,6 @@ def add_word(db: Session, word: Word) -> Word:
     db.commit()
     db.refresh(db_word)
     return db_word
-
-
-def delete_word(db: Session, word: str) -> Optional[Word]:
-    word = get_word(db, word)
-    if word:
-        db.delete(word)
-        db.commit()
-        return word
-    else:
-        raise NoResultFound
-
-
-def update_word(
-    db: Session,
-    word_id: int,
-    word: Word,
-) -> Optional[Word]:
-    db_word = __get_word(db, word_id)
-    if db_word:
-        word_data = word.model_dump(exclude_unset=True)
-        for key, value in word_data.items():
-            setattr(db_word, key, value)
-        db.commit()
-        return db_word
-    else:
-        raise NoResultFound
 
 
 if __name__ == "__main__":

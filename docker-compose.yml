@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - CREATE_DB=true # Передаем переменную окружения в сборку образа
+        - CREATE_DB=true
     ports:
       - "8000:8000"
     volumes:
