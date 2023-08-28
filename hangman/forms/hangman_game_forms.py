@@ -1,36 +1,21 @@
 from flask_wtf import FlaskForm
-from wtforms import (
-    SubmitField,
-    BooleanField,
-    StringField,
-    PasswordField,
-    FloatField,
-    SelectField,
-)
-from wtforms.validators import (
-    DataRequired,
-    ValidationError,
-    EqualTo,
-    Email,
-    InputRequired,
-)
-from flask_wtf.file import FileField, FileAllowed
-from hangman import Account, current_user
+from wtforms import SelectField, StringField, SubmitField
+from wtforms.validators import DataRequired, InputRequired
 
 
 class GameStartForm(FlaskForm):
     category = SelectField(
         "Category",
         choices=[
-            "animals",
-            "home",
-            "jobs",
-            "food",
-            "clothes",
-            "countries",
-            "cities",
-            "space",
-            "mountains",
+            ("animals", "Animals"),
+            ("home", "Home"),
+            ("jobs", "Jobs"),
+            ("food", "Food"),
+            ("clothes", "Clothes"),
+            ("countries", "Countries"),
+            ("cities", "Cities"),
+            ("space", "Space"),
+            ("mountains", "Mountains"),
         ],
         validators=[InputRequired(message="Please select a category.")],
     )

@@ -19,8 +19,12 @@
                 <td>{{ game.game_date.strftime('%Y.%m.%d  %H:%M') }}</td>
                 <td>{{ game.category }}</td>
                 <td>{{ game.word }}</td>
-                <td>{{ game.game_result }}</td>
-                
+                <td>
+                    {% if game.game_result %}
+                        Win
+                    {% else %}
+                        Lost
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

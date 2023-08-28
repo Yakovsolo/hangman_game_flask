@@ -1,10 +1,17 @@
-from sqlalchemy import Column, DateTime, Integer, String
-from sqlalchemy import DateTime
+import logging
+import logging.config
 from datetime import datetime
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from os import path
+
 from flask_login import UserMixin
-from sqlalchemy.sql import func
+from itsdangerous import Serializer
+from sqlalchemy import Boolean, DateTime, Integer, String
+
 from hangman import app, db
+
+log_file_path = path.join(path.dirname(path.abspath(__file__)), "../logging.conf")
+logging.config.fileConfig(log_file_path)
+logger = logging.getLogger("sLogger")
 
 
 class Account(db.Model, UserMixin):
@@ -16,10 +23,11 @@ class Account(db.Model, UserMixin):
     password = db.Column(String(60), nullable=False)
     registration_date = db.Column(DateTime, default=datetime.now())
     avatar = db.Column(String(20), nullable=False, default="default.jpg")
-    games_played = db.Column(Integer)
-    games_win = db.Column(Integer)
-    games_loose = db.Column(Integer)
-    game_record = db.relationship("GameRecord")
+    games_played = db.Column(Integer, default=0)
+    games_win = db.Column(Integer, default=0)
+    games_loose = db.Column(Integer, default=0)
+    is_admin = db.Column(Boolean, default=False, nullable=False)
+    game_record = db.relationship("GameRecord", back_populates="account")
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(app.config["SECRET_KEY"], expires_sec)
@@ -34,3 +42,32 @@ class Account(db.Model, UserMixin):
         except:
             return None
         return Account.query.get(account_id)
+
+    def reset_password(self, new_password):
+        from hangman import bcrypt
+
+        hashed_password = bcrypt.generate_password_hash(new_password).decode("utf-8")
+        self.password = hashed_password
+        db.session.commit()
+
+    @classmethod
+    def create_admin(cls, name, surname, email, password):
+        from hangman import bcrypt
+
+        try:
+            hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+            admin_account = cls(
+                name=name,
+                surname=surname,
+                email=email,
+                password=hashed_password,
+                is_admin=True,
+            )
+            db.session.add(admin_account)
+            db.session.commit()
+            logger.info("Admin account created successfully")
+            return admin_account
+        except Exception as e:
+            db.session.rollback()
+            logger.error(f"An error occurred while creating an admin account: {e}")
+            return None

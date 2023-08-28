@@ -1,0 +1,12 @@
+{% extends "admin.html" %}
+{% block content %}
+<div class="container">
+    <h2>Delete Word</h2>
+    <form method="post">
+        {{ delete_word_form.csrf_token }}
+        {{ delete_word_form.word.label(class="form-label") }}
+        {{ delete_word_form.word(class="form-control") }}
+        <button class="btn btn-danger mt-2" type="submit" name="delete_word">Delete Word</button>
+    </form>
+</div>
+{% endblock %}

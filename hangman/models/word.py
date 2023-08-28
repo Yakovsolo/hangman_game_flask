@@ -1,11 +1,7 @@
-from sqlalchemy import Column, DateTime, Integer, String
-from sqlalchemy import DateTime
-from datetime import datetime
-from itsdangerous import Serializer
 from flask_login import UserMixin
-from sqlalchemy.sql import func
+from sqlalchemy import Integer, String
 
-from hangman import app, db
+from hangman import db
 
 
 class Word(db.Model, UserMixin):

@@ -1,0 +1,14 @@
+{% extends "admin.html" %}
+{% block content %}
+<div class="container">
+    <h2>Add Word</h2>
+    <form method="post">
+        {{ add_word_form.csrf_token }}
+        {{ add_word_form.word.label(class="form-label") }}
+        {{ add_word_form.word(class="form-control") }}
+        {{ add_word_form.category.label(class="form-label") }}
+        {{ add_word_form.category(class="form-select") }}
+        <button class="btn btn-success mt-2" type="submit" name="add_word">Add Word</button>
+    </form>
+</div>
+{% endblock %}

@@ -26,76 +26,116 @@
                 <div class="row letter-group justify-content-center mb-3">
                     <div class="col-lg-10">
                         <form id="letterForm" action="{{ url_for('play_game') }}" method="post">
-                            <input type="hidden" name="hashed_word" value="{{ hashed_word }}">
-                            <input type="hidden" name="used_letters" value="{{ used_letters | tojson }}">
                             <div class="input-group">
                                 <input type="text" class="form-control" name="letter" id="letterInput" maxlength="1" pattern="[A-Za-z]" title="Please enter a single letter." required>
-                                <button class="btn btn-primary" type="submit">Submit</button>
+                                <button class="btn btn-primary" type="submit">Try letter</button>
                             </div>
                         </form>
-
-                        
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <form action="/exit" method="post">
-                            <button type="submit" class="btn btn-danger">Выход</button>
-                        </form>
-                    </div>
-                </div>
+    <div class="col-lg-8">
+        <form action="/restart_and_record_loss" method="post" class="d-inline-block">
+            <button type="submit" class="btn btn-danger">Restart</button>
+        </form>
+        <form action="/exit_and_record_loss" method="post" class="d-inline-block">
+            <button type="submit" class="btn btn-danger">Exit</button>
+        </form>
+    </div>
+</div>
             </div>
         </div>
     </div>
 </div>
-
+<!-- modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Warning</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You have an ongoing game. Are you sure you want to leave?
+            </div>
+           <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Stay</button>
+        <button type="button" class="btn btn-danger" id="leaveLossBtn">Leave and Record Loss</button>
+    </div>
+        </div>
+    </div>
+</div>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.letter').forEach(function(button) {
-            if (localStorage.getItem(button.id) === 'used') {
-                button.disabled = true;
-                button.classList.add("used");
-            }
-        });
+    var formSubmitted = false;
+    var leaveLossUrl = null;
+    var linkClicked = false;
+    var modalShown = false;
 
-        if (document.getElementById("hiddenLetterInput").value === "") {
-            document.querySelectorAll('.letter').forEach(function(button) {
-                button.disabled = false;
-            });
-        } else {
-            document.querySelectorAll('.letter').forEach(function(button) {
-                if (localStorage.getItem(button.id) === 'used') {
-                    button.disabled = true;
-                    button.classList.add("used");
+    document.addEventListener("click", function (event) {
+    var target = event.target;
+
+    if (target.classList.contains("leave-warning-trigger")) {
+        var hashed_word = "{{ hashed_word }}";
+        var word = "{{ word }}";
+
+        if (hashed_word !== word && !formSubmitted) {
+            event.preventDefault();
+            leaveLossUrl = target.getAttribute("href");
+            $('#myModal').modal('show'); 
+            modalShown = true; 
+        }
+    }
+});
+    document.getElementById("leaveLossBtn").addEventListener("click", function () {
+        var hashed_word = "{{ hashed_word }}";
+        var word = "{{ word }}";
+
+        if (hashed_word !== word && !formSubmitted) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "{{ url_for('record_loss') }}");
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    if (leaveLossUrl) {
+                        window.location.href = leaveLossUrl;
+                    }
                 }
-            });
+            };
+            xhr.send();
         }
     });
 
-    function sendLetter(button, letter) {
-        const formData = new FormData();
-        formData.append("letter", letter);
+    document.getElementById("letterForm").addEventListener("submit", function () {
+        formSubmitted = true;
+    });
 
-        fetch("/play_game", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("hashed_word").innerHTML = data.hashed_word;
-            document.getElementById("counter").textContent = data.counter;
-            document.getElementById("used_letters").textContent = data.used_letters.join(' ');
-            document.getElementById("wrong_attempts").textContent = data.wrong_attempts;
+    window.addEventListener("beforeunload", function (event) {
+        var hashed_word = "{{ hashed_word }}";
+        var word = "{{ word }}";
 
-            if (data.result) {
-                alert(data.result);
+        if (!linkClicked && hashed_word !== word && !formSubmitted) {
+            if (!modalShown) {
+                event.preventDefault();
+                event.returnValue = "You have an ongoing game. Are you sure you want to leave?";
+            } 
+            else {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "{{ url_for('record_loss') }}");
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+                xhr.send();
             }
+        }
+    });
 
-            button.disabled = true;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
+    document.getElementById("exitForm").addEventListener("submit", function (event) {
+        leaveLossUrl = event.target.action;
+    });
+
+    document.getElementById("restartForm").addEventListener("submit", function (event) {
+        leaveLossUrl = event.target.action;
+    });
 </script>
+
 {% endblock %}

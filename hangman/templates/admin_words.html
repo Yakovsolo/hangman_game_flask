@@ -1,0 +1,35 @@
+{% extends "admin.html" %}
+{% block content %}
+<div class="container">
+    <h2>Word Management</h2>
+    <div class="mb-3">
+        <a class="btn btn-success" href="{{ url_for('admin_add_word') }}">Add Word</a>
+        <a class="btn btn-danger ml-2" href="{{ url_for('admin_delete_word') }}">Delete Word</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Word</th>
+                <th>Category</th>
+                <th>Times called</th>
+                <th>Times answered</th>
+                <th>Times lost</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for word in words %}
+            <tr>
+                <td>{{ word.id }}</td>
+                <td>{{ word.word }}</td>
+                <td>{{ word.category }}</td>
+                <td>{{ word.times_called }}</td>
+                <td>{{ word.times_answered }}</td>
+                <td>{{ word.times_lost }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
