@@ -42,27 +42,27 @@ docker compose up
 To guess the hidden word by guessing one letter at a time. If the player guesses a correct letter, it is revealed in the word. If the letter is not part of the word, a part of the hangman figure is drawn.
 
 ## Rules
-![Start](hangman\static\game\rules\start_game.jpg "Start game")
+![Start](/hangman/static/game/rules/start_game.jpg "Start game")
 
 1. The player chooses a category from the available options: "animals", "home", "jobs", "food", "clothes", "countries", "cities", "space", "mountains".
 
 2. Based on the chosen category and difficulty, the program randomly selects a word within the specified letter range.
 
-![Difficulty](hangman\static\game\rules\difficulty.jpg "Difficulty")
+![Difficulty](/hangman/static/game/rules/difficulty.jpg "Difficulty")
 
 3. Based on the chosen category and difficulty, the program randomly selects a word within the specified letter range.
 
-![Gameplay](hangman\static\game\rules\gameplay_first.jpg "Gameplay")
+![Gameplay](/hangman/static/game/rules/gameplay_first.jpg "Gameplay")
 
 4. The player starts guessing letters by entering them one by one.
 
 5. If the guessed letter is incorrect, a new part of the hangman figure is drawn (head, body, arms, legs, etc.).
 
-![Wrong letter](hangman\static\game\rules\wrong_letter.jpg "Wrong letter")
+![Wrong letter](/hangman/static/game/rules/wrong_letter.jpg "Wrong letter")
 
 6. If a correct letter is guessed, it is revealed in the appropriate positions in the word.
 
-![Correct letter](hangman\static\game\rules\correct_letter.jpg "Correct letter")
+![Correct letter](/hangman/static/game/rules/correct_letter.jpg "Correct letter")
 
 7. The player continues guessing letters until they guess the entire word or the hangman figure is completely drawn.
 
@@ -70,7 +70,7 @@ To guess the hidden word by guessing one letter at a time. If the player guesses
 
 9. You can make a mistake in guessing the letter ten times. After ten mistakes, the gallows will be over and you will be hanged.
 
-![Game win](hangman\static\game\rules\game_win.jpg "Game win")
+![Game win](/hangman/static/game/rules/game_win.jpg "Game win")
 
 10. The player can play another game by selecting a new category and difficulty.
 
