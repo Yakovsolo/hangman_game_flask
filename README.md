@@ -2,7 +2,7 @@
 
 Hangman Game App is a classic word-guessing game where players try to guess a hidden word by suggesting letters within a limited number of tries. This repository contains a web-based implementation of the Hangman game with user registration, leaderboards, multiple difficulty modes, and user account summaries.
 
-![Play](hangman\static\game\title.png "Title")
+![Title](/hangman/static/game/title.png "Title")
 
 ## Getting Started
 
