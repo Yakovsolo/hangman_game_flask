@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<html>
+<head>
+    <title>Game statistics</title>
+</head>
+<body>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Avatar</th>
+            <th>Player</th>
+            <th>Games played</th>
+            <th>Games win</th>
+            <th>Games loose</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for account in accounts %}
+            <tr>
+                <td><img class="rounded-circle account-img" style="width: 25%; height: auto;" src="{{ url_for('static', filename='avatars/' + account.avatar) }}"></td>
+                <td>{{ account.name }} {{ account.surname }}</td>
+                <td>{{ account.games_played }}</td>
+                <td>{{ account.games_win }}</td>
+                <td>{{ account.games_loose }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>
+{% endblock %}

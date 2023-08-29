@@ -1,0 +1,13 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="col-lg-12 text-center" style="position: relative;"> 
+    <div style="position: absolute; top: 130%; left: 50%; transform: translate(-50%, -50%);">
+        <h1>Welcome to Hangman Game!</h1>
+        <p style="margin-top: 1em;">Get ready to play an exciting game of Hangman!</p>
+        <a href="{{ url_for('start_game') }}" class="btn btn-primary btn-lg" style="margin-top: 1em;">Start game!</a>
+    </div>
+    <img src="/static/game/title.png" alt="Title" style="display: block; margin: 0 auto; max-width: 100%;">
+</div>
+{% endblock content %}

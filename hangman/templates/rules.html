@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hangman Game Rules</title>
+    <style>
+        img {
+            max-width: 70%;
+        }
+        body {
+            font-size: 16px;
+        }
+        .rule-text {
+            margin-bottom: 2em;
+            font-size: 24px; 
+        }
+        .rule-item {
+            margin-top: 1.5em; 
+        }
+        .rule-item img {
+            display: block; 
+            margin-top: 1em; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Hangman Game Rules</h1>
+    <div class="rule-text">
+        <h2>Aim of the Game:</h2>
+        <p>To guess the hidden word by guessing one letter at a time. If the player guesses a correct letter, it is revealed in the word. If the letter is not part of the word, a part of the hangman figure is drawn.</p>
+    </div>
+    <div class="rule-text">
+        <h2>Rules:</h2>
+        <ol>
+            <li class="rule-item">
+                <img src="/static/game/rules/start_game.jpg" alt="Start game">
+            </li>
+            <li class="rule-item">The player chooses a category from the available options: "animals", "home", "jobs", "food", "clothes", "countries", "cities", "space", "mountains".</li>
+            <li class="rule-item">Next, the player selects a difficulty level: Easy, Medium, Hard.
+                <img src="/static/game/rules/difficulty.jpg" alt="Difficulty Levels">
+            </li>
+            <li class="rule-item">Based on the chosen category and difficulty, the program randomly selects a word within the specified letter range.
+                <img src="/static/game/rules/gameplay_first.jpg" alt="Gameplay">
+            </li>
+            <li class="rule-item">The player starts guessing letters by entering them one by one.</li>
+            
+            <li class="rule-item">If the guessed letter is incorrect, a new part of the hangman figure is drawn (head, body, arms, legs, etc.).
+                <img src="/static/game/rules/wrong_letter.jpg" alt="Wrong Letter">
+            </li>
+            <li class="rule-item">If a correct letter is guessed, it is revealed in the appropriate positions in the word.
+                <img src="/static/game/rules/correct_letter.jpg" alt="Correct Letter">
+            </li>
+            <li class="rule-item">The player continues guessing letters until they guess the entire word or the hangman figure is completely drawn.</li>
+            <li class="rule-item">The game ends when the player guesses the word or when the hangman figure is fully drawn. In case of loss, the correct word is revealed.
+            <li class="rule-item">You can make a mistake in guessing the letter ten times. After ten mistakes, the gallows will be over and you will be hanged.
+                <img src="/static/game/rules/game_win.jpg" alt="Win">
+            </li>
+            <li class="rule-item">The player can play another game by selecting a new category and difficulty.</li>
+        </ol>
+    </div>
+</body>
+</html>
+{% endblock content %}

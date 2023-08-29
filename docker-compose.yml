@@ -1,0 +1,40 @@
+version: '3'
+services:
+  hangman-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - hangman-data:/app/data
+    depends_on:
+      - hangman-database
+      - hangman-test-database
+
+  hangman-database:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: hangman
+    ports:
+      - "5455:5432"
+    volumes:
+      - hangman-db-data:/var/lib/postgresql/data
+
+  hangman-test-database:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_db
+    ports:
+      - "5456:5432"
+    volumes:
+      - hangman-test-db-data:/var/lib/postgresql/data
+
+volumes:
+  hangman-data:
+  hangman-db-data:
+  hangman-test-db-data:

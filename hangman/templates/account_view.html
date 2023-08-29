@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card" style="background-color: #121212;">
+                <div class="card-header" style="font-size: 4rem;">Account Details</div>
+                <div class="card-body">
+                    <div class="text-left">
+                        <img src="{{ url_for('static', filename='avatars/' + account_data.avatar) }}"
+                             class="rounded-circle account-img" style="width: 150px; height: 150px;">
+                    </div>
+                    <ul class="list-group mt-4" style="background-color: #121212;">
+                        <li class="list-group-item" style="background-color: #121212; font-size: 2rem;"><strong>Name:</strong> {{ account_data.name }}</li>
+                        <li class="list-group-item" style="background-color: #121212; font-size: 2rem;"><strong>Surname:</strong> {{ account_data.surname }}</li>
+                        <li class="list-group-item" style="background-color: #121212; font-size: 2rem;"><strong>Email:</strong> {{ account_data.email }}</li>
+                        <li class="list-group-item" style="background-color: #121212; font-size: 2rem;"><strong>Registration date:</strong> {{ account_data.registration_date.strftime('%Y-%m-%d %H:%M') }}</li>
+                        <li class="list-group-item" style="background-color: #121212; font-size: 2rem;"><strong>Games played:</strong> {{ account_data.games_played }}</li>
+                        <li class="list-group-item" style="background-color: #121212; font-size: 2rem;"><strong>Games win:</strong> {{ account_data.games_win }}</li>
+                        <li class="list-group-item" style="background-color: #121212; font-size: 2rem;"><strong>Games loose:</strong> {{ account_data.games_loose }}</li>
+                    </ul>
+                    <a href="{{ url_for('account_update') }}" class="btn btn-primary mt-3">Change Account Data</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

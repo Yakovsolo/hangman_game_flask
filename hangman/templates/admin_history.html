@@ -1,0 +1,38 @@
+{% extends "admin.html" %}
+{% block content %}
+<html>
+<head>
+    <title>Game History</title>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Player</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Word</th>
+            <th>Result</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        {% for game in games %}
+            <tr>
+                <td>{{ game.account.name }} {{game.account.surname}}</td>
+                <td>{{ game.game_date.strftime('%Y.%m.%d  %H:%M') }}</td>
+                <td>{{ game.category }}</td>
+                <td>{{ game.word }}</td>
+                <td>
+                    {% if game.game_result %}
+                        Win
+                    {% else %}
+                        Lost
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+        
+</body>
+</html>
+{% endblock %}

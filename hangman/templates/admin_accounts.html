@@ -1,0 +1,43 @@
+{% extends "admin.html" %}
+{% block content %}
+<html>
+<head>
+    <title>Game statistics</title>
+</head>
+<body>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Avatar</th>
+            <th>Player name</th>
+            <th>Player surname</th>
+            <th>Player email</th>
+            <th>Games played</th>
+            <th>Games win</th>
+            <th>Games loose</th>
+            <th>Delete account</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for account in accounts %}
+            <tr>
+                <td><img class="rounded-circle account-img" style="width: 25%; height: auto;" src="{{ url_for('static', filename='avatars/' + account.avatar) }}"></td>
+                <td>{{ account.name }} </td>
+                <td>{{ account.surname }} </td>
+                <td>{{ account.email }} </td>
+                <td>{{ account.games_played }}</td>
+                <td>{{ account.games_win }}</td>
+                <td>{{ account.games_loose }}</td>
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="delete_account_id" value="{{ account.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>
+{% endblock %}

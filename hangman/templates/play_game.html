@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 d-flex align-items-center justify-content-center">
+            <div class="text-center" id="imageContainer">
+                <div class="mt-4">
+                    <img id="letterImage" src="{{ url_for('static', filename='game/' + image_name + '.png') }}" alt="Hangman Image">
+                </div>
+                <h2 class="mt-4">Used Letters:</h2>
+                {% for letter in used_letters %}
+                    {{ letter }}&nbsp;
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-lg-6 d-flex align-items-center justify-content-center">
+            <div class="text-center">
+                <div id="wordContainer" class="mt-4">
+                    {% for letter in hashed_word %}
+                        {{ letter }}&nbsp;
+                    {% endfor %}
+                </div>
+                <h2 class="mt-4">Select a Letter:</h2>
+                <div class="row letter-group justify-content-center mb-3">
+                    <div class="col-lg-10">
+                        <form id="letterForm" action="{{ url_for('play_game') }}" method="post">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="letter" id="letterInput" maxlength="1" pattern="[A-Za-z]" title="Please enter a single letter." required>
+                                <button class="btn btn-primary" type="submit">Try letter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+    <div class="col-lg-8">
+        <form action="/restart_and_record_loss" method="post" class="d-inline-block">
+            <button type="submit" class="btn btn-danger">Restart</button>
+        </form>
+        <form action="/exit_and_record_loss" method="post" class="d-inline-block">
+            <button type="submit" class="btn btn-danger">Exit</button>
+        </form>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Warning</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                You have an ongoing game. Are you sure you want to leave?
+            </div>
+           <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Stay</button>
+        <button type="button" class="btn btn-danger" id="leaveLossBtn">Leave and Record Loss</button>
+    </div>
+        </div>
+    </div>
+</div>
+<script>
+    var formSubmitted = false;
+    var leaveLossUrl = null;
+    var linkClicked = false;
+    var modalShown = false;
+
+    document.addEventListener("click", function (event) {
+    var target = event.target;
+
+    if (target.classList.contains("leave-warning-trigger")) {
+        var hashed_word = "{{ hashed_word }}";
+        var word = "{{ word }}";
+
+        if (hashed_word !== word && !formSubmitted) {
+            event.preventDefault();
+            leaveLossUrl = target.getAttribute("href");
+            $('#myModal').modal('show'); 
+            modalShown = true; 
+        }
+    }
+});
+    document.addEventListener("click", function(event) {
+    var target = event.target;
+
+    if (target.id === "leaveLossBtn") {
+        var hashed_word = "{{ hashed_word }}";
+        var word = "{{ word }}";
+
+        if (hashed_word !== word && !formSubmitted) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "{{ url_for('record_loss') }}");
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    if (leaveLossUrl) {
+                        window.location.href = leaveLossUrl;
+                    }
+                }
+            };
+            xhr.send();
+        }
+    }
+});
+
+    document.getElementById("letterForm").addEventListener("submit", function () {
+        formSubmitted = true;
+    });
+
+    window.addEventListener("beforeunload", function (event) {
+        var hashed_word = "{{ hashed_word }}";
+        var word = "{{ word }}";
+
+        if (!linkClicked && hashed_word !== word && !formSubmitted) {
+            if (!modalShown) {
+                event.preventDefault();
+                event.returnValue = "You have an ongoing game. Are you sure you want to leave?";
+            } 
+            else {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "{{ url_for('record_loss') }}");
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+                xhr.send();
+            }
+        }
+    });
+
+    document.getElementById("exitForm").addEventListener("submit", function (event) {
+        leaveLossUrl = event.target.action;
+    });
+
+    document.getElementById("restartForm").addEventListener("submit", function (event) {
+        leaveLossUrl = event.target.action;
+    });
+</script>
+
+{% endblock %}
