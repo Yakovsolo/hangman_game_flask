@@ -18,4 +18,6 @@ if [ "$CREATE_DB" = "true" ]; then
   fi
 fi
 
+
+
 exec gunicorn -w 4 -b 0.0.0.0:8000 main:app --workers 1 --threads 2
