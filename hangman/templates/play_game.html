@@ -88,7 +88,10 @@
         }
     }
 });
-    document.getElementById("leaveLossBtn").addEventListener("click", function () {
+    document.addEventListener("click", function(event) {
+    var target = event.target;
+
+    if (target.id === "leaveLossBtn") {
         var hashed_word = "{{ hashed_word }}";
         var word = "{{ word }}";
 
@@ -96,7 +99,7 @@
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "{{ url_for('record_loss') }}");
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-            xhr.onload = function () {
+            xhr.onload = function() {
                 if (xhr.status === 200) {
                     if (leaveLossUrl) {
                         window.location.href = leaveLossUrl;
@@ -105,7 +108,8 @@
             };
             xhr.send();
         }
-    });
+    }
+});
 
     document.getElementById("letterForm").addEventListener("submit", function () {
         formSubmitted = true;

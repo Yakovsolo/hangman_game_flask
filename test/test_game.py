@@ -4,8 +4,6 @@ import unittest
 from hangman import app, db
 from hangman.game import HangmanGame
 
-print("FLASK_ENV:", os.environ.get("FLASK_ENV"))
-
 
 class TestHangmanGame(unittest.TestCase):
     def setUp(self):

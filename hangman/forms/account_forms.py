@@ -17,7 +17,7 @@ class AccountRegistrationForm(FlaskForm):
     )
     submit = SubmitField("Register")
 
-    def check_email(self, email):
+    def check_email(self, email: str):
         db_account = Account.query.filter_by(email=email.data).first()
         if db_account:
             raise ValidationError("This email email address is used. Choose another.")
@@ -42,7 +42,7 @@ class RequestRefreshForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
     submit = SubmitField("Get!")
 
-    def validate_email(self, email):
+    def validate_email(self, email: str):
         account = Account.query.filter_by(email=email.data).first()
         if account is None:
             raise ValidationError(

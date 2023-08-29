@@ -1,6 +1,5 @@
 import logging
 import logging.config
-import os
 import secrets
 from functools import wraps
 from os import path
@@ -71,10 +70,10 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for("index"))
     form = account_forms.AccountLoginForm()
+
     if form.validate_on_submit():
-        print("AAAAAAAAAAAAAAAAAAAAA")
         account = Account.query.filter_by(email=form.email.data).first()
-        print(account)
+
         if account and bcrypt.check_password_hash(account.password, form.password.data):
             login_user(account, remember=form.remember.data)
             logger.info(f"Successful login for user with email: {account.email}")
@@ -150,9 +149,9 @@ def reset_token(token):
 
 def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
+    _, f_ext = path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, "static/avatars", picture_fn)
+    picture_path = path.join(app.root_path, "static/avatars", picture_fn)
     output_size = (125, 125)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
@@ -186,6 +185,7 @@ def account_update():
         game.update_account_data(current_user, name, surname, email, avatar)
         flash("Your account updated!", "success")
         return redirect(url_for("account_view"))
+
     elif request.method == "GET":
         form.name.data = current_user.name
         form.surname.data = current_user.surname

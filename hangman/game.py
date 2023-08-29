@@ -85,7 +85,7 @@ class HangmanGame(GameRecordCrud, WordCrud, AccountCrud):
                 return "".join(new_hashed_word)
             else:
                 return hashed_word
-            
+
         except Exception as e:
             logger.error(f"An error occurred while trying letter: {e}")
             return hashed_word
@@ -110,19 +110,15 @@ if __name__ == "__main__":
             max_length=100,
         )
         word = db_word.word
-        print(word)
 
         hashed_word = game.hash_word(db_word)
-        print(hashed_word)
         counter = 10
         while counter > 0:
             new_letter = input("Please enter letter").upper()
             hashed_word = game.try_letter(new_letter, word, hashed_word)
-            print(hashed_word)
-            print(str(counter))
             counter -= 1
             if hashed_word == word:
                 print("You win")
                 break
         if hashed_word != word:
-            print(str(counter))
+            print(hashed_word)

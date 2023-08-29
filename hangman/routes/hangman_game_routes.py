@@ -83,8 +83,8 @@ def start_game():
             account_id=account_id,
         )
         session["game_info_id"] = game_info_id
-
         return redirect(url_for("play_game"))
+
     return render_template("start_game.html", form=form)
 
 
@@ -104,7 +104,6 @@ def play_game():
 
     game_info = game.get_game_record_by_id(game_info_id)
     word = game_info.word
-
     hashed_word = session.get("hashed_word", game.hash_word(word))
     used_letters = session.get("used_letters", [])
     wrong_attempts = session.get("wrong_attempts", 0)
@@ -256,7 +255,7 @@ def record_loss():
             f"Game ID {game_info_id} ended in loss. User: {current_user.id}, Word: {word}"
         )
         session.pop("game_info_id", None)
-    return
+    return "Loss recorded successfully", 200
 
 
 @app.route("/exit_and_record_loss", methods=["POST"])
@@ -305,7 +304,6 @@ def admin_history():
         game_settings=None,
     )
     games = game.get_all_game_records()
-
     return render_template("admin_history.html", games=games)
 
 
@@ -345,10 +343,7 @@ def admin_words():
     )
     words = game.get_all_words()
 
-    return render_template(
-        "admin_words.html",
-        words=words,
-    )
+    return render_template("admin_words.html", words=words)
 
 
 @app.route("/admin/add_word", methods=["GET", "POST"])

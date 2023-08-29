@@ -20,14 +20,6 @@ class TestingConfig(Config):
     )
 
 
-# class DevelopmentConfig(Config):
-#     SQLALCHEMY_DATABASE_URI = "postgresql://user:password@localhost:5432/hangman"
-
-
-# class TestingConfig(Config):
-#     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "test.db")
-
-
 config = {
     "development": DevelopmentConfig,
     "testing": TestingConfig,

@@ -43,7 +43,7 @@ class Account(db.Model, UserMixin):
             return None
         return Account.query.get(account_id)
 
-    def reset_password(self, new_password):
+    def reset_password(self, new_password: str):
         from hangman import bcrypt
 
         hashed_password = bcrypt.generate_password_hash(new_password).decode("utf-8")
@@ -51,7 +51,13 @@ class Account(db.Model, UserMixin):
         db.session.commit()
 
     @classmethod
-    def create_admin(cls, name, surname, email, password):
+    def create_admin(
+        cls,
+        name: str,
+        surname: str,
+        email: str,
+        password: str,
+    ):
         from hangman import bcrypt
 
         try:

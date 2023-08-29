@@ -1,24 +1,18 @@
 import os
 
 from flask import Flask
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
 
-from hangman.config_test import config
+from hangman.config import config
 from hangman.email_settings import MAIL_PASSWORD, MAIL_USERNAME
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+
 app.config["SECRET_KEY"] = os.urandom(24)
-# app.config[
-#     "SQLALCHEMY_DATABASE_URI"
-# ] = "postgresql://user:password@localhost:5455/postgres"
 
 app.config.from_object(config[os.environ.get("FLASK_ENV", "default")])
 

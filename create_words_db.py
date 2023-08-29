@@ -1,53 +1,16 @@
-from random import choice
-from typing import Optional
+from typing import Dict, List
 
 from sqlalchemy.orm import Session
-from sqlalchemy.orm.exc import NoResultFound
 
 from hangman import app, db
 from hangman.models.word import Word
-
 
 with app.app_context():
     db.create_all()
 
 
-def get_word(
-    db: Session,
-    search_word: str,
-) -> Optional[Word]:
-    word = db.query(Word).filter(Word.name == search_word).first()
-    if word:
-        return word
-    else:
-        raise NoResultFound
-
-
-def get_random_word(db: Session) -> str:
-    all_words = db.query(Word).all()
-    words = [word.word for word in all_words]
-    random_word = choice(words)
-    return random_word
-
-
-def get_random_word_by_len(
-    db: Session,
-    word_length: int,
-) -> str:
-    all_words = db.query(Word).filter(Word.word_length == word_length).all()
-    words = [word.word for word in all_words]
-    random_word = choice(words)
-    return random_word
-
-
-def get_random_word_by_category(
-    db: Session,
-    category: str,
-) -> str:
-    all_words = db.query(Word).filter(Word.word_length == category).all()
-    words = [word.word for word in all_words]
-    random_word = choice(words)
-    return random_word
+def has_data_in_database(db: Session) -> bool:
+    return db.query(Word).count() > 0
 
 
 def add_word(
@@ -63,6 +26,23 @@ def add_word(
     db.commit()
     db.refresh(db_word)
     return db_word
+
+
+def create_words_db(words: Dict[str, List[str]]) -> None:
+    with app.app_context():
+        session = Session(bind=db.engine)
+        if not has_data_in_database(session):
+            for category, word_list in words.items():
+                for word in word_list:
+                    word_data = Word(
+                        word=word,
+                        word_length=len(word),
+                        category=category,
+                        times_called=0,
+                        times_answered=0,
+                        times_lost=0,
+                    )
+                    add_word(session, word_data)
 
 
 if __name__ == "__main__":
@@ -977,21 +957,4 @@ if __name__ == "__main__":
         ],
     }
 
-
-with app.app_context():
-    session = Session(bind=db.engine)
-
-    for category, word_list in words.items():
-        for word in word_list:
-            word_data = Word(
-                word=word,
-                word_length=len(word),
-                category=category,
-                times_called=0,
-                times_answered=0,
-                times_lost=0,
-            )
-            add_word(session, word_data)
-
-    session.commit()
-    session.close()
+    create_words_db(words=words)

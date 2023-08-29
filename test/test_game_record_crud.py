@@ -5,8 +5,6 @@ from hangman import app, db
 from hangman.database_crud import AccountCrud, GameRecordCrud, WordCrud
 from hangman.models.game_record import GameRecord
 
-print("FLASK_ENV:", os.environ.get("FLASK_ENV"))
-
 
 class TestAccountCrud(unittest.TestCase):
     def setUp(self):

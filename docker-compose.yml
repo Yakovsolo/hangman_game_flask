@@ -4,8 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - CREATE_DB=true
     ports:
       - "8000:8000"
     volumes:
