@@ -38,6 +38,17 @@ docker compose build
 docker compose up
 ```
 
+## Default Administrator
+
+Dedault administrator credentials:
+ - email: admin@admin.com
+ - password: admin
+
+If you want to change the data by logging into the administrator account, go to:
+
+http://{your local host}:8000/account
+
+
 ## Aim of the Game:
 To guess the hidden word by guessing one letter at a time. If the player guesses a correct letter, it is revealed in the word. If the letter is not part of the word, a part of the hangman figure is drawn.
 
